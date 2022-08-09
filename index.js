@@ -2,17 +2,30 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const dotenv = require('dotenv');
-const connection = require('./db');
+
 const registerRoute = require('./routes');
+const mongoose = require('mongoose');
 
 app.use(express.json());
-connection();
+
 app.use(cors());
 dotenv.config();
 
-app.use('/api', registerRoute);
+app.use('/', registerRoute);
 
-app.listen(5000, () => {
-    console.log('Server is running at port 5000');
+const PORT = process.env.PORT || 5000
+
+mongoose.connect("mongodb+srv://Gsathiya:capstoneproject@cluster0.ktemn.mongodb.net/SigninSignup?retryWrites=true&w=majority").then(() => {
+    console.log("DB connected successfully")
+}).catch((err) => {
+    console.log(err)
 })
 
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`)
+})
+
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+  })
